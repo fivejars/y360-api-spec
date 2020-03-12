@@ -113,6 +113,14 @@ link:#group_exp[GroupXClass API Guide]
 ** link:#_example_request_group_exp[Example request]
 ** link:#_example_response_group_exp[Example response]
 
+* link:#group_exp_api_multiple[Fetch multiple Assets based on GroupXClass data]
+** link:#_request_headers_group_exp_multiple[Request headers]
+** link:#_path_parameters_group_exp_multiple[Path parameters]
+** link:#_query_parameters_group_exp_multiple[Query parameters]
+** link:#_response_fields_group_exp_multiple[Response fields]
+** link:#_example_request_group_exp_multiple[Example request]
+** link:#_example_response_group_exp_multiple[Example response]
+
 [[content]]
 [[resources-programs]]
 == link:#resources-programs[Errors]
@@ -867,6 +875,13 @@ Content-Type: application/json;charset=UTF-8
       "method" : "progressive",
       "sizeInBytes" : 178128897,
       "sourceUrl" : "https://vhx-progressive.akamaized.net/-ctx--user_id,3879560--platform_id,2990--video_id,349905--channel_id,47517--plan,public-/c-47517/v-349905/vf-1649353.mp4?token=exp=1548011756~acl=%2F-ctx--user_id%2C3879560--platform_id%2C2990--video_id%2C349905--channel_id%2C47517--plan%2Cpublic-%2Fc-47517%2Fv-349905%2F%2A~hmac=ceb3c92746e9ab75b4b070798fec8e7eb5a1db93646118d85cd5e4f8c5abd371&response-content-disposition=attachment%3Bfilename%3D%22BODYCOMBAT%20Extreme%20Cardio%20Remix%2002%20144p.mp4%22"
+    },
+    {
+      "mimeType": "application/x-mpegURL",
+      "format": "m3u8",
+      "sourceUrl": "http://fast.wistia.net/embed/medias/lo6hplfo4y.m3u8",
+      "quality": "adaptive",
+      "method": "hls"
     } ],
     "subtitles" : [ {
       "locale" : "en",
@@ -1144,7 +1159,7 @@ No request body.
 [width="100%",cols="25%,25%,25%,25%",options="header",]
 |===
 | Path | Type | Optional | Description
-| items | Map | false | Array of Key-Value to represent assets.
+| items | Array | false | Array of the assets.
 | items[].groupxclass_id | String | false | Class Unique ID.
 | items[].images | Array | false | Array of image objects.
 | items[].images[].format | String | false | Image style of the image file.
@@ -1226,6 +1241,153 @@ Content-Type: application/json;charset=UTF-8
 
 ----
 
+[[group_exp_api_multiple]]
+=== link:#group_exp_api_multiple[Fetch multiple Assets based on GroupXClass data]
+
+`POST /api/virtual-classes/{source}/v1.0/content-providers/{provider}/get-multiple-assets`
+
+This operation returns category assets based on GroupXClass data for specific classes.
+
+[[_request_headers_group_exp_multiple]]
+==== link:#_request_headers_group_exp_multiple][Request headers]
+
+[width="100%",cols="50%,50%",options="header",]
+|===
+|Name |Value
+|Accept |application/json
+|authorization |apiKey xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+|===
+
+[[_path_parameters_group_exp_multiple]]
+==== link:#_path_parameters_group_exp_multiple[Path parameters]
+
+[width="100%",cols="25%,25%,25%,25%",options="header",]
+|===
+|Parameter |Type |Optional |Description
+|source |String |false |Unique ID of the Source data Provider (For example - groupxclasses).
+|provider |String |false |Unique ID of the Content Provider.
+|===
+
+[[_query_parameters_group_exp_multiple]]
+==== link:#_query_parameters_group_exp_multiple[Body example]
+
+----
+{
+  "items": [
+    {
+      "id": 23550,
+      "name": "Test 7",
+      "activity": "Activity 2"
+    },
+    {
+      "id": 23549,
+      "name": "Test 8",
+      "activity": "yoga"
+    },
+    {
+      "id": 23544,
+      "name": "Test 9",
+      "activity": "bare"
+    }
+  ]
+}
+----
+
+[width="100%",cols="25%,25%,25%,25%",options="header",]
+|===
+|Parameter |Type |Optional |Description
+|id |String |false |Class Unique ID.
+|name |String |false |Class name.
+|activity |String |false |Class activity.
+|===
+
+[[_response_fields_group_exp_multiple]]
+==== link:#_response_fields_app_settings_multiple[Response fields]
+
+[width="100%",cols="25%,25%,25%,25%",options="header",]
+|===
+| Path | Type | Optional | Description
+| items | Map | false | Array of Key-Value to represent assets.
+| items[groupxclass_id].groupxclass_id | String | false | Class Unique ID.
+| items[groupxclass_id].images | Array | false | Array of image objects.
+| items[groupxclass_id].images[].format | String | false | Image style of the image file.
+| items[groupxclass_id].images[].sourceUrl | String | false | Image object url of the image file.
+| items[groupxclass_id].video |Array |true |Array with Videos brief info.
+| items[groupxclass_id].video[].name |String |false |Name of the Video (e.g. 'RPM #79 Express', 'BODYPUMP #100').
+| items[groupxclass_id].video[].id |String |false |Unique ID of the Video.
+| items[groupxclass_id].video[].duration |Integer |false |Video duration in seconds.
+| items[]groupxclass_id.video[].episode |Object |true |Video Episode.
+| items[groupxclass_id].video[].episode.number |Integer |true |Number of episode in season.
+| items[groupxclass_id].video[].episode.season |Integer |true |Number of season.
+| items[groupxclass_id].video[].thumbnail |String |false |Thumbnail of the Video.
+| items[groupxclass_id].video[].customInfo |Map |false |Array of Key-Value to represent additional information of an entity. Partners could contain diverse information of same entities. This type designed to store that information.
+|===
+
+[[_example_request_group_exp_multiple]]
+==== link:#_example_request_group_exp_multiple[Example request]
+
+[source,highlightjs,highlight]
+----
+$ curl 'http://localhost:8080/api/virtual-classes/groupxclasses/v1.0/content-providers/wichita/get-multiple-assets' -i -X POST -H 'Content-Type: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0' -d '{"items": [{"id": 23550,"name": "Test 7","activity": "Activity 2"},{"id": 23549,"name": "Test 8","activity": "yoga"},{"id": 23544,"name": "Test 9","activity": "bare"}]}'
+----
+
+[[_example_response_group_exp_multiple]]
+==== link:#_example_response_group_exp_multiple[Example response]
+
+[source,highlightjs,highlight,nowrap]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+
+{
+  "items": {
+    "23550": {
+      "groupxclass_id": 23550,
+      "images": [
+        {
+          "format": "720p",
+          "sourceUrl": "http://y360cms.docksal/sites/default/files/styles/image_response_big/public/2020-01/tild6465-3939-4633-b031-623836313966_tild3563-3434-4635-b.jpg?itok=4l712E1Q"
+        },
+        {
+          "format": "origin",
+          "sourceUrl": "http://y360cms.docksal/sites/default/files/2020-01/tild6465-3939-4633-b031-623836313966_tild3563-3434-4635-b.jpg"
+        }
+        ],
+        "video": []
+      },
+      "23549": {
+        "groupxclass_id": 23549,
+        "images": [
+          {
+            "format": "720p",
+            "sourceUrl": "http://y360cms.docksal/sites/default/files/styles/image_response_big/public/2020-01/tild6465-3939-4633-b031-623836313966_tild3563-3434-4635-b.jpg?itok=4l712E1Q"
+          },
+          {
+            "format": "origin",
+            "sourceUrl": "http://y360cms.docksal/sites/default/files/2020-01/tild6465-3939-4633-b031-623836313966_tild3563-3434-4635-b.jpg"
+          }
+        ],
+        "video": []
+      },
+      "23544": {
+        "groupxclass_id": 23544,
+        "images": [
+          {
+            "format": "720p",
+            "sourceUrl": "http://y360cms.docksal/sites/default/files/styles/image_response_big/public/2020-01/tild6465-3939-4633-b031-623836313966_tild3563-3434-4635-b.jpg?itok=4l712E1Q"
+          },
+          {
+            "format": "origin",
+            "sourceUrl": "http://y360cms.docksal/sites/default/files/2020-01/tild6465-3939-4633-b031-623836313966_tild3563-3434-4635-b.jpg"
+          }
+        ],
+        "video": []
+      }
+  }
+}
+
+----
+
 [[footer]]
 [[footer-text]]
-Last updated 2020-02-03 13:55:00 +0200
+Last updated 2020-12-03 18:00:00 +0200
