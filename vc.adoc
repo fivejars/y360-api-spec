@@ -25,6 +25,24 @@ Table of Contents
 
 link:#_program_briefs[Program Briefs]
 
+* link:#resources-top-level-categories[Top-level Categories]
+** link:#_request_headers_13[Request headers]
+** link:#_path_parameters_13[Path parameters]
+** link:#_query_parameters_13[Query parameters]
+** link:#_request_fields_13[Request fields]
+** link:#_response_fields_13[Response fields]
+** link:#_example_request_13[Example request]
+** link:#_example_response_13[Example response]
+
+* link:#resources-sub-categories[Sub-categories]
+** link:#_request_headers_14[Request headers]
+** link:#_path_parameters_14[Path parameters]
+** link:#_query_parameters_14[Query parameters]
+** link:#_request_fields_14[Request fields]
+** link:#_response_fields_14[Response fields]
+** link:#_example_request_14[Example request]
+** link:#_example_response_14[Example response]
+
 * link:#resources-search-programs-controller-i-t-should-search-programs[Search Programs]
 ** link:#_request_headers_3[Request headers]
 ** link:#_path_parameters_3[Path parameters]
@@ -237,6 +255,210 @@ Content-Type: application/json;charset=UTF-8
 [[_program_briefs]]
 == link:#_program_briefs[Program Briefs]
 
+[[resources-top-level-categories]]
+=== link:#resources-top-level-categories[Top-level Categories]
+
+`GET /api/virtual-classes/v3.0/content-providers/{provider}/categories`
+
+This operation extracts top-level catgories. It returns only brief information about categories.
+
+[[_request_headers_13]]
+==== link:#_request_headers_13[Request headers]
+
+[width="100%",cols="50%,50%",options="header",]
+|===
+|Name |Description
+|Accept |application/json
+|authorization |API key for authentication (e.g., `authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0`)
+|===
+
+[[_path_parameters_13]]
+==== link:#_path_parameters_13[Path parameters]
+
+[width="100%",cols="25%,25%,25%,25%",options="header",]
+|===
+|Parameter |Type |Optional |Description
+|provider |String |false |Unique ID of the Content Provider.
+|===
+
+[[_query_parameters_13]]
+==== link:#_query_parameters_13[Query parameters]
+
+[width="100%",cols="25%,25%,25%,25%",options="header",]
+|===
+|Parameter |Type |Optional |Description
+|exerciserUuid |String |true |Exerciser Unique ID.
+|===
+
+[[_request_fields_13]]
+==== link:#_request_fields_13[Request fields]
+
+[width="100%",cols="25%,25%,25%,25%",options="header",]
+|===
+|Path |Type |Optional |Description
+|page |Integer |true |Page you want to retrieve, 0 indexed and defaults to 0.
+|limit |Integer |true |Size of the page you want to retrieve, defaults to 20.
+|===
+
+[[_response_fields_13]]
+==== link:#_response_fields_13[Response fields]
+
+[width="100%",cols="25%,25%,25%,25%",options="header",]
+|===
+|Path |Type |Optional |Description
+|items |Array[Object] |false |Actual items.
+|items[].name |String |false |Name of the Category (e.g. 'BODYSTEP', 'THE TRIP').
+|items[].id |String |false |Unique ID of the Category.
+|items[].videoCount |Integer |false |Number of videos.
+|items[].thumbnail |String |false |Thumbnail of the Category.
+|summary |Object |false |Page summary.
+|summary.limit |Integer |false |Requested size of the page.
+|summary.page |Integer |false |Page number.
+|summary.total |Integer |false |Total count of items.
+|===
+
+[[_example_request_13]]
+==== link:#_example_request_13[Example request]
+
+[source,highlightjs,highlight]
+----
+$ curl 'http://localhost:8080/api/virtual-classes/v3.0/content-providers/wichita/categories?page=0&limit=50' -i -X GET \
+    -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
+----
+
+[[_example_response_13]]
+==== link:#_example_response_13[Example response]
+
+[source,highlightjs,highlight,nowrap]
+----
+HTTP/1.1 200 OK
+Content-Length: 271
+Content-Type: application/json;charset=UTF-8
+
+{
+  "items" : [ {
+    "id" : "44440",
+    "name" : "Martial Arts",
+    "videoCount" : 0,
+    "thumbnail" : "https://vhx.imgix.net/lm-test/assets/bfed04fd-db97-4093-9670-513f50f6f123-c30849ec.jpg"
+  },
+  {
+    "id" : "44441",
+    "name" : "Yoga",
+    "videoCount" : 0,
+    "thumbnail" : "https://vhx.imgix.net/lm-test/assets/bfed04fd-db97-4093-9670-852a31c78802-c00044eb.jpg"
+  }],
+  "summary" : {
+    "total" : 2,
+    "page" : 0,
+    "limit" : 50
+  }
+}
+----
+
+[[resources-sub-categories]]
+=== link:#resources-sub-categories[Sub-categories]
+
+`GET /api/virtual-classes/v3.0/content-providers/{provider}/categories/{categoryId}/sub-categories`
+
+This operation extracts sub-categories of a category. It returns only brief information about categories.
+
+[[_request_headers_14]]
+==== link:#_request_headers_14[Request headers]
+
+[width="100%",cols="50%,50%",options="header",]
+|===
+|Name |Description
+|Accept |application/json
+|authorization |API key for authentication (e.g., `authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0`)
+|===
+
+[[_path_parameters_14]]
+==== link:#_path_parameters_14[Path parameters]
+
+[width="100%",cols="25%,25%,25%,25%",options="header",]
+|===
+|Parameter |Type |Optional |Description
+|provider |String |false |Unique ID of the Content Provider.
+|categoryId |Integer |false |Unique ID of the Category.
+|===
+
+[[_query_parameters_14]]
+==== link:#_query_parameters_14[Query parameters]
+
+[width="100%",cols="25%,25%,25%,25%",options="header",]
+|===
+|Parameter |Type |Optional |Description
+|exerciserUuid |String |true |Exerciser Unique ID.
+|===
+
+[[_request_fields_14]]
+==== link:#_request_fields_14[Request fields]
+
+[width="100%",cols="25%,25%,25%,25%",options="header",]
+|===
+|Path |Type |Optional |Description
+|page |Integer |true |Page you want to retrieve, 0 indexed and defaults to 0.
+|limit |Integer |true |Size of the page you want to retrieve, defaults to 20.
+|===
+
+[[_response_fields_14]]
+==== link:#_response_fields_14[Response fields]
+
+[width="100%",cols="25%,25%,25%,25%",options="header",]
+|===
+|Path |Type |Optional |Description
+|items |Array[Object] |false |Actual items.
+|items[].name |String |false |Name of the Sub-category (e.g. 'Judo', 'Taekwondo').
+|items[].id |String |false |Unique ID of the Sub-category.
+|items[].videoCount |Integer |false |Number of videos.
+|items[].thumbnail |String |false |Thumbnail of the Sub-category.
+|summary |Object |false |Page summary.
+|summary.limit |Integer |false |Requested size of the page.
+|summary.page |Integer |false |Page number.
+|summary.total |Integer |false |Total count of items.
+|===
+
+[[_example_request_14]]
+==== link:#_example_request_14[Example request]
+
+[source,highlightjs,highlight]
+----
+$ curl 'http://localhost:8080/api/virtual-classes/v3.0/content-providers/wichita/categories/44440/subcategories?page=0&limit=50' -i -X GET \
+    -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
+----
+
+[[_example_response_14]]
+==== link:#_example_response_14[Example response]
+
+[source,highlightjs,highlight,nowrap]
+----
+HTTP/1.1 200 OK
+Content-Length: 271
+Content-Type: application/json;charset=UTF-8
+
+{
+  "items" : [ {
+    "id" : "44450",
+    "name" : "Judo",
+    "videoCount" : 10,
+    "thumbnail" : "https://vhx.imgix.net/lm-test/assets/bfed04fd-db97-4093-9670-513f50f6f123-c30849ec.jpg"
+  },
+  {
+    "id" : "44451",
+    "name" : "Taekwondo",
+    "videoCount" : 12,
+    "thumbnail" : "https://vhx.imgix.net/lm-test/assets/bfed04fd-db97-4093-9670-852a31c78802-c00044eb.jpg"
+  }],
+  "summary" : {
+    "total" : 2,
+    "page" : 0,
+    "limit" : 50
+  }
+}
+----
+
+
 [[resources-search-programs-controller-i-t-should-search-programs]]
 === link:#resources-search-programs-controller-i-t-should-search-programs[Search Programs]
 
@@ -269,7 +491,7 @@ This operation search Programs. It returns only brief information about Programs
 [width="100%",cols="25%,25%,25%,25%",options="header",]
 |===
 |Parameter |Type |Optional |Description
-|exerciserUuid |String |false |Exerciser Unique ID.
+|exerciserUuid |String |true |Exerciser Unique ID.
 |searchString |String |true |The query to search.
 |===
 
@@ -369,7 +591,7 @@ This operation returns all detailed information about Program.
 [width="100%",cols="25%,25%,25%,25%",options="header",]
 |===
 |Parameter |Type |Optional |Description
-|exerciserUuid |String |false |Exerciser Unique ID.
+|exerciserUuid |String |true |Exerciser Unique ID.
 |===
 
 [[_request_fields_4]]
@@ -679,7 +901,7 @@ This operation fetch recently added Videos. It returns only brief information ab
 [width="100%",cols="25%,25%,25%,25%",options="header",]
 |===
 |Parameter |Type |Optional |Description
-|exerciserUuid |String |false |Exerciser Unique ID.
+|exerciserUuid |String |true |Exerciser Unique ID.
 |===
 
 [[_request_fields_6]]
@@ -1112,7 +1334,7 @@ This operation returns all set up settings.
 [width="100%",cols="25%,25%,25%,25%",options="header",]
 |===
 |Parameter |Type |Optional |Description
-|exerciserUuid |String |false |Exerciser Unique ID.
+|exerciserUuid |String |true |Exerciser Unique ID.
 |===
 
 [[_request_fields_app_settings]]
@@ -1232,7 +1454,7 @@ This operation returns setting values objects array by key.
 [width="100%",cols="25%,25%,25%,25%",options="header",]
 |===
 |Parameter |Type |Optional |Description
-|exerciserUuid |String |false |Exerciser Unique ID.
+|exerciserUuid |String |true |Exerciser Unique ID.
 |===
 
 [[_request_fields_app_setting]]
@@ -1326,7 +1548,7 @@ This operation returns all category assets based on GroupXClass data.
 [width="100%",cols="25%,25%,25%,25%",options="header",]
 |===
 |Parameter |Type |Optional |Description
-|exerciserUuid |String |false |Exerciser Unique ID.
+|exerciserUuid |String |true |Exerciser Unique ID.
 |id |String |false |Class Unique ID.
 |name |String |false |Class name.
 |activity |String |false |Class activity.
