@@ -240,7 +240,7 @@ Content-Type: application/json;charset=UTF-8
 [[resources-search-programs-controller-i-t-should-search-programs]]
 === link:#resources-search-programs-controller-i-t-should-search-programs[Search Programs]
 
-`GET /api/virtual-classes/v2.0/content-providers/{provider}/programs`
+`GET /api/virtual-classes/v3.0/content-providers/{provider}/programs`
 
 This operation search Programs. It returns only brief information about Programs.
 
@@ -305,7 +305,7 @@ This operation search Programs. It returns only brief information about Programs
 
 [source,highlightjs,highlight]
 ----
-$ curl 'http://localhost:8080/api/virtual-classes/v2.0/content-providers/lmod/programs?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760&searchString=BODYSTEP&page=0&limit=50' -i -X GET \
+$ curl 'http://localhost:8080/api/virtual-classes/v3.0/content-providers/lmod/programs?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760&searchString=BODYSTEP&page=0&limit=50' -i -X GET \
     -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
 ----
 
@@ -339,7 +339,7 @@ Content-Type: application/json;charset=UTF-8
 [[resources-fetch-program-details-controller-i-t-should-fetch-program-details]]
 === link:#resources-fetch-program-details-controller-i-t-should-fetch-program-details[Fetch Program Details]
 
-`GET /api/virtual-classes/v2.0/content-providers/{provider}/programs/{programId}`
+`GET /api/virtual-classes/v3.0/content-providers/{provider}/programs/{programId}`
 
 This operation returns all detailed information about Program.
 
@@ -398,7 +398,7 @@ No request body.
 
 [source,highlightjs,highlight]
 ----
-$ curl 'http://localhost:8080/api/virtual-classes/v2.0/content-providers/lmod/programs/44440?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760' -i -X GET \
+$ curl 'http://localhost:8080/api/virtual-classes/v3.0/content-providers/lmod/programs/44440?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760' -i -X GET \
     -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
 ----
 
@@ -434,7 +434,7 @@ Content-Type: application/json;charset=UTF-8
 [[resources-fetch-program-video-briefs-controller-i-t-should-fetch-program-videos]]
 === link:#resources-fetch-program-video-briefs-controller-i-t-should-fetch-program-videos[Fetch Program Videos]
 
-`GET /api/virtual-classes/v2.0/content-providers/{provider}/programs/{programId}/videos`
+`GET /api/virtual-classes/v3.0/content-providers/{provider}/programs/{programId}/videos`
 
 This operation returns brief information about Program Videos.
 
@@ -471,22 +471,10 @@ Sort order
 Can be one of [`createdAsc`, `createdDesc`, `titleAsc`, `titleDesc`, `instructorAsc` (`instructor`), `instructorDesc`, `locationAsc` (`location`), `locationDesc`].
 
 Category-specific user-set order if not specified or not matching the listed options.
-|location (deprecated) |String |true |Location filter. Location names joined by comma (deprecated)
-|level (deprecated) |String |true |Workout level filter. Level names joined by comma (deprecated)
-|instructor (deprecated) |String |true |Instructor filter. Instructor names joined by comma (deprecated)
-|equipment (deprecated) |String |true |Equipment filter. Equipment names joined by comma (deprecated)
 |location[] |Array[String] |true |Location filter. Location names.
 |level[] |Array[String] |true |Workout level filter. Level names.
 |instructor[] |Array[String] |true |Instructor filter. Instructor names.
 |equipment[] |Array[String] |true |Equipment filter. Equipment names.
-|equipmentReq (deprecated) |String |true a|
-Equipment required filter.
-
-Can be one of [`yes`, `no`].
-
-`yes` matches videos with equipment set but not equal 'N/A'.
-`no` matches videos without equipment set or set to 'N/A'.
-(deprecated)
 |equipmentReq[] |Array[String] |true a|
 Equipment required filter.
 
@@ -502,15 +490,10 @@ Can be one of [`yes`, `no`].
 [NOTE]
 ====
 `location`, `level`, `instructor`, `equipment` filter query parameters support
-2 ways of passing values: as collections (when [] suffix is used) or as
-comma-separated strings of values.
+of passing values as comma-separated strings of values is dropped in 3.0.
 
 Apparently, the comma-separated values don't support commas in filter
-values, therefore this way is deprecated in 2.0 and will be removed in future
-versions. Do not use it.
-
-Presently both ways can be used. Avoid mixing them as you might get the
-unexpected results.
+values, therefore this way is deprecated in 2.0 and is removed in 3.0.
 ====
 
 [[_request_fields_5]]
@@ -561,13 +544,7 @@ unexpected results.
 
 [source,highlightjs,highlight]
 ----
-$ curl 'http://localhost:8080/api/virtual-classes/v2.0/content-providers/lmod/programs/44440/videos?location[]=Charlotte&location[]=Houston&location[]=Wichita&sort=locationDesc&equipmentReq=no&page=0&limit=50' -i -X GET \
-    -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
-----
-or (equal request)
-[source,highlightjs,highlight]
-----
-$ curl 'http://localhost:8080/api/virtual-classes/v2.0/content-providers/lmod/programs/44440/videos?location=Charlotte,Houston,Wichita&sort=locationDesc&equipmentReq=no&page=0&limit=50' -i -X GET \
+$ curl 'http://localhost:8080/api/virtual-classes/v3.0/content-providers/lmod/programs/44440/videos?location[]=Charlotte&location[]=Houston&location[]=Wichita&sort=locationDesc&equipmentReq=no&page=0&limit=50' -i -X GET \
     -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
 ----
 
@@ -673,7 +650,7 @@ Content-Type: application/json;charset=UTF-8
 [[resources-fetch-featured-videos-controller-i-t-should-fetch-featured-videos]]
 === link:#resources-fetch-featured-videos-controller-i-t-should-fetch-featured-videos[Fetch Featured Videos]
 
-`GET /api/virtual-classes/v2.0/content-providers/{provider}/featured-videos`
+`GET /api/virtual-classes/v3.0/content-providers/{provider}/featured-videos`
 
 This operation fetch recently added Videos. It returns only brief information about Video.
 
@@ -743,7 +720,7 @@ This operation fetch recently added Videos. It returns only brief information ab
 
 [source,highlightjs,highlight]
 ----
-$ curl 'http://localhost:8080/api/virtual-classes/v2.0/content-providers/lmod/featured-videos?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760&page=0&limit=50' -i -X GET \
+$ curl 'http://localhost:8080/api/virtual-classes/v3.0/content-providers/lmod/featured-videos?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760&page=0&limit=50' -i -X GET \
     -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
 ----
 
@@ -778,7 +755,7 @@ Content-Type: application/json;charset=UTF-8
 [[resources-search-videos-controller-i-t-should-search-videos]]
 === link:#resources-search-videos-controller-i-t-should-search-videos[Search Videos]
 
-`GET /api/virtual-classes/v2.0/content-providers/{provider}/videos`
+`GET /api/virtual-classes/v3.0/content-providers/{provider}/videos`
 
 This operation search Videos. It returns only brief information about Videos.
 
@@ -817,14 +794,6 @@ This operation search Videos. It returns only brief information about Videos.
 |===
 |Path |Type |Optional |Description
 |searchString |String |false |The searchString to search video.
-|duration (deprecated)|String |true a|
-Video duration filter option.
-
-Must be one of [`short`, `long`, `15m`, `30m`, `45m`, `1h`, `1hplus`], where:
-short (up to 30 min), long (30 min or longer), 15m (up to 15 min), 30m (up to 30 min), 45m (up to 45 min), 1h (up to 1 hour), 1hplus (1 hour or longer).
-
-Supports multiple values joined by comma. In case of multiple values, works as
-`OR` operator. (deprecated)
 |duration[] |Array[String] |true a|
 Video duration filter option.
 
@@ -840,26 +809,12 @@ Sort order
 Can be one of [`createdAsc`, `createdDesc`, `titleAsc`, `titleDesc`, `instructorAsc` (`instructor`), `instructorDesc`, `locationAsc` (`location`), `locationDesc`].
 
 `createdDesc` if not specified or not matching the listed options.
-|vids (deprecated) |String |true |Video IDs joined by comma
-|program (deprecated) |String |true |Category filter. Category names joined by comma (deprecated)
-|location (deprecated) |String |true |Location filter. Location names joined by comma (deprecated)
-|level (deprecated) |String |true |Workout level filter. Level names joined by comma (deprecated)
-|instructor (deprecated) |String |true |Instructor filter. Instructor names joined by comma (deprecated)
-|equipment (deprecated) |String |true |Equipment filter. Equipment names joined by comma (deprecated)
 |vids[] |Array[Integer] |true |Video ID filter. Video IDs.
 |program[] |Array[String] |true |Category filter. Category names.
 |location[] |Array[String] |true |Location filter. Location names.
 |level[] |Array[String] |true |Workout level filter. Level names.
 |instructor[] |Array[String] |true |Instructor filter. Instructor names.
 |equipment[] |Array[String] |true |Equipment filter. Equipment names.
-|equipmentReq (deprecated) |String |true a|
-Equipment required filter.
-
-Can be one of [`yes`, `no`].
-
-`yes` matches videos with equipment set but not equal 'N/A'.
-`no` matches videos without equipment set or set to 'N/A'.
-(deprecated)
 |equipmentReq[] |Array[String] |true a|
 Equipment required filter.
 
@@ -875,15 +830,11 @@ Can be one of [`yes`, `no`].
 [NOTE]
 ====
 `duration`, `vids`, `program`, `location`, `level`, `instructor`, `equipment`
-filter query parameters support 2 ways of passing values: as collections (when
-[] suffix is used) or as comma-separated strings of values.
+filter query parameters support of passing values as comma-separated strings of
+values is dropped in 3.0.
 
-Apparently, the comma-separated values don't support commas in filter
-values, therefore this way is deprecated in 2.0 and will be removed in future
-versions. Do not use it.
-
-Presently both ways can be used. Avoid mixing them as you might get the
-unexpected results.
+Apparently, the comma-separated values don't support commas in filter values,
+therefore this way is deprecated in 2.0 and is removed in 3.0.
 ====
 
 [[_response_fields_10]]
@@ -925,13 +876,7 @@ unexpected results.
 
 [source,highlightjs,highlight]
 ----
-$ curl 'http://localhost:8080/api/virtual-classes/v2.0/content-providers/lmod/videos?searchString=RPM%20%2379%20Express&duration=15m,1hplus&page=0&limit=50' -i -X GET \
-    -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
-----
-or (equal request)
-[source,highlightjs,highlight]
-----
-$ curl 'http://localhost:8080/api/virtual-classes/v2.0/content-providers/lmod/videos?searchString=RPM%20%2379%20Express&duration[]=15m&duration[]=1hplus&page=0&limit=50' -i -X GET \
+$ curl 'http://localhost:8080/api/virtual-classes/v3.0/content-providers/lmod/videos?searchString=RPM%20%2379%20Express&duration[]=15m&duration[]=1hplus&page=0&limit=50' -i -X GET \
     -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
 ----
 
@@ -1001,7 +946,7 @@ Content-Type: application/json;charset=UTF-8
 [[resources-fetch-video-controller-i-t-should-fetch-video]]
 === link:#resources-fetch-video-controller-i-t-should-fetch-video[Fetch Video]
 
-`GET /api/virtual-classes/v2.0/content-providers/{provider}/videos/{videoId}`
+`GET /api/virtual-classes/v3.0/content-providers/{provider}/videos/{videoId}`
 
 This operation returns all detailed information about Video.
 
@@ -1083,7 +1028,7 @@ No request body.
 
 [source,highlightjs,highlight]
 ----
-$ curl 'http://localhost:8080/api/virtual-classes/v2.0/content-providers/lmod/videos/375633?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760' -i -X GET \
+$ curl 'http://localhost:8080/api/virtual-classes/v3.0/content-providers/lmod/videos/375633?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760' -i -X GET \
     -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
 ----
 
@@ -1139,7 +1084,7 @@ Content-Type: application/json;charset=UTF-8
 [[app_settings]]
 === link:#app_settings[Fetch App Settings]
 
-`GET /settings/v2.0/content-providers/{provider}/app-settings`
+`GET /settings/v3.0/content-providers/{provider}/app-settings`
 
 This operation returns all set up settings.
 
@@ -1203,7 +1148,7 @@ No request body.
 
 [source,highlightjs,highlight]
 ----
-$ curl 'http://localhost:8080/settings/v2.0/content-providers/wichita/app-settings?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760' -i -X GET \
+$ curl 'http://localhost:8080/settings/v3.0/content-providers/wichita/app-settings?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760' -i -X GET \
     -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
 ----
 
@@ -1258,7 +1203,7 @@ Content-Type: application/json;charset=UTF-8
 [[app_setting]]
 === link:#app_setting[Get App Setting]
 
-`GET /settings/v2.0/content-providers/{provider}/app-settings/{key}`
+`GET /settings/v3.0/content-providers/{provider}/app-settings/{key}`
 
 This operation returns setting values objects array by key.
 
@@ -1320,7 +1265,7 @@ No request body.
 
 [source,highlightjs,highlight]
 ----
-$ curl 'http://localhost:8080/settings/v2.0/content-providers/wichita/app-settings/customKey1?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760' -i -X GET \
+$ curl 'http://localhost:8080/settings/v3.0/content-providers/wichita/app-settings/customKey1?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760' -i -X GET \
     -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
 ----
 
@@ -1351,7 +1296,7 @@ Content-Type: application/json;charset=UTF-8
 [[group_exp_api]]
 === link:#group_exp_api[Fetch Categories based on GroupXClass data]
 
-`GET /api/virtual-classes/{source}/v2.0/content-providers/{provider}/get-category-asset`
+`GET /api/virtual-classes/{source}/v3.0/content-providers/{provider}/get-category-asset`
 
 This operation returns all category assets based on GroupXClass data.
 
@@ -1419,7 +1364,7 @@ No request body.
 
 [source,highlightjs,highlight]
 ----
-$ curl 'http://localhost:8080/api/virtual-classes/groupxclasses/v2.0/content-providers/wichita/get-category-asset?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760&id=9204039012020&name=Step Express&activity=Step Express' -i -X GET \
+$ curl 'http://localhost:8080/api/virtual-classes/groupxclasses/v3.0/content-providers/wichita/get-category-asset?exerciserUuid=8965a460-a79e-4bf7-b66c-7e34d8c34760&id=9204039012020&name=Step Express&activity=Step Express' -i -X GET \
 -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
 ----
 
