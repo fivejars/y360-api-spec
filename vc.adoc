@@ -3016,7 +3016,7 @@ This operation returns brief information about Category upcoming Live Streams.
 |items[].instructors[].id |String |true |Instructor ID.
 |items[].level |String |true |Workout level.
 |items[].association |String |true |(Host's) Association name.
-|items[].topLevelCategory |Integer |false |Top Level Category ID.
+|items[].topLevelCategoryId |Integer |false |Top Level Category ID.
 |items[].topLevelCategoryName |String |false |Top Level Category Name.
 |items[].program |Integer |false |Category ID.
 |items[].programName |String |false |Category name.
@@ -3075,7 +3075,7 @@ Content-Type: application/json;charset=UTF-8
               }
             ],
             "level": "BEGINNER",
-            "topLevelCategory": 203,
+            "topLevelCategoryId": 203,
             "topLevelCategoryName": "Kids Family",
             "program": 44440,
             "programName": "Kid's Acitivities",
@@ -3189,7 +3189,7 @@ This operation searches Live Streams. It returns brief information about live st
 |items[].instructors[].id |String |true |Instructor ID.
 |items[].level |String |true |Workout level.
 |items[].association |String |true |Host Association name.
-|items[].topLevelCategory |Integer |false |Top Level Category ID.
+|items[].topLevelCategoryId |Integer |false |Top Level Category ID.
 |items[].topLevelCategoryName |String |false |Top Level Category Name.
 |items[].program |Integer |false |Category ID.
 |items[].programName |String |false |Category name.
@@ -3251,7 +3251,7 @@ Content-Type: application/json;charset=UTF-8
           }
         ],
         "level": "BEGINNER",
-        "topLevelCategory": 203,
+        "topLevelCategoryId": 203,
         "topLevelCategoryName": "Kids Family",
         "program": 22,
         "programName": "Kids' Acitivities",
@@ -3340,7 +3340,7 @@ This operation returns all detailed information about a Live Stream.
 |liveStreamBrief.instructors[].id |String |true |Instructor ID.
 |liveStreamBrief.association |String |true |Host Association name.
 |liveStreamBrief.level |String |true |Workout level.
-|liveStreamBrief.topLevelCategory |Integer |false |Top Level Category ID.
+|liveStreamBrief.topLevelCategoryId |Integer |false |Top Level Category ID.
 |liveStreamBrief.topLevelCategoryName |String |false |Top Level Category Name.
 |liveStreamBrief.program |Integer |false |Category ID.
 |liveStreamBrief.programName |String |false |Category name.
@@ -3388,7 +3388,7 @@ Content-Type: application/json;charset=UTF-8
           }
         ],
         "level": "BEGINNER",
-        "topLevelCategory": 203,
+        "topLevelCategoryId": 203,
         "topLevelCategoryName": "Kids Family",
         "program": 22,
         "programName": "Kids' Acitivities",
