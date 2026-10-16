@@ -1374,6 +1374,7 @@ This endpoints lists available collections. It returns only brief information ab
 |items[].videos.items[].releaseDate |Integer |false |Video release timestamp.
 |items[].videos.items[].workoutModality |String |false |Workout modality.
 |items[].videos.items[].hardwareManufacturer |String |true |Hardware manufacturer.
+|items[].videos.items[].age |Array[String] |false |Target age groups of the video (names of "Age" terms).
 |items[].videos.items[].language |String |false |Video language.
 |items[].weight |Integer |false |The collection weight (defines the order).
 |summary |Object |false |Page summary.
@@ -1722,6 +1723,7 @@ This operation returns brief information about Category Videos.
 |items[].video.releaseDate |Integer |false |Video release timestamp.
 |items[].video.workoutModality |String |false |Workout modality.
 |items[].video.hardwareManufacturer |String |true |Hardware manufacturer.
+|items[].video.age |Array[String] |false |Target age groups of the video (names of "Age" terms).
 |items[].video.language |String |false |Video language.
 |items[].topLevelCategory |Object |false |Top level category related to highlighted videos.
 |items[].topLevelCategory.name |String |false |Name of the Sub-category (e.g. 'Judo', 'Taekwondo').
@@ -1865,16 +1867,30 @@ This operation returns brief information about Category Videos.
 |===
 |Parameter |Type |Optional |Description
 |exerciserUuid |String |true |Exerciser Unique ID.
+|searchString |String |true |The query to search videos within the Category.
 |sort |String |true a|
 Sort order
 
 Can be one of [`createdAsc`, `createdDesc`, `titleAsc`, `titleDesc`, `instructorAsc` (`instructor`), `instructorDesc`, `locationAsc` (`location`), `locationDesc`].
 
-Category-specific user-set order if not specified or not matching the listed options.
+`createdDesc` returns the most recent videos first, `titleAsc` sorts videos alphabetically.
+
+If not specified or not matching the listed options:
+
+* search relevance when `searchString` is set;
+* Category-specific user-set order otherwise. Videos missing in the user-set order go last, most recent first.
+|duration[] |Array[String] |true a|
+Video duration filter option.
+
+Must be one of [`short`, `long`, `15m`, `30m`, `45m`, `1h`, `1hplus`], where:
+short (up to 30 min), long (30 min or longer), 15m (up to 15 min), 30m (up to 30 min), 45m (up to 45 min), 1h (up to 1 hour), 1hplus (1 hour or longer).
+
+Supports multiple values. In case of multiple values, works as `OR` operator.
 |location[] |Array[String] |true |Location filter. Location names.
 |level[] |Array[String] |true |Workout level filter. Level names.
 |instructor[] |Array[String] |true |Instructor filter. Instructor names.
 |equipment[] |Array[String] |true |Equipment filter. Equipment names.
+|age[] |Array[String] |true |Age filter. Age names.
 |equipmentReq[] |Array[String] |true a|
 Equipment required filter.
 
@@ -1943,6 +1959,7 @@ values, therefore this way is deprecated in 2.0 and is removed in 3.0.
 |items[].language |String |false |Video language.
 |items[].workoutModality |String |false |Workout modality.
 |items[].hardwareManufacturer |String |true |Hardware manufacturer.
+|items[].age |Array[String] |false |Target age groups of the video (names of "Age" terms).
 |summary |Object |false |Page summary.
 |summary.limit |Integer |false |Requested size of the page.
 |summary.page |Integer |false |Page number.
@@ -1954,14 +1971,22 @@ values, therefore this way is deprecated in 2.0 and is removed in 3.0.
 |summary.facets.location |Array[Object] |false |Filter values the "location" filter.
 |summary.facets.instructor |Array[Object] |false |Filter values the "instructor" filter.
 |summary.facets.equipment |Array[Object] |false |Filter values the "equipment" filter.
+|summary.facets.workoutModality |Array[Object] |false |Filter values the "workoutModality" filter.
+|summary.facets.duration |Array[Object] |false |Filter values the "duration" filter, in the order of the `duration[]` parameter values. The values overlap, e.g. a 10 minutes video is counted in `15m`, `30m`, `short`, etc.
+|summary.facets.age |Array[Object] |false |Filter values the "age" filter.
 |===
+
+[NOTE]
+====
+Facets are calculated in scope of the Category and the `searchString`. The filters don't change the facets.
+====
 
 [[_example_request_5]]
 ==== link:#_example_request_5[Example request]
 
 [source,highlightjs,highlight]
 ----
-$ curl 'http://localhost:8080/api/virtual-classes/v4.0/content-providers/lmod/programs/44440/videos?location[]=Charlotte&location[]=Houston&location[]=Wichita&sort=locationDesc&equipmentReq=no&page=0&limit=50' -i -X GET \
+$ curl 'http://localhost:8080/api/virtual-classes/v4.0/content-providers/lmod/programs/44440/videos?searchString=yoga&location[]=Charlotte&location[]=Houston&location[]=Wichita&duration[]=30m&age[]=Kids&sort=locationDesc&equipmentReq=no&page=0&limit=50' -i -X GET \
     -H 'Accept: application/json' -H 'authorization: apiKey 0a47c3bf-4740-465d-a22e-0b25ef86ddd0'
 ----
 
@@ -2007,7 +2032,8 @@ Content-Type: application/json;charset=UTF-8
             "location": "Wichita",
             "language": "English",
             "workoutModality": "Bike",
-            "hardwareManufacturer": "Matrix"
+            "hardwareManufacturer": "Matrix",
+            "age": ["Kids"]
         },
         {
             "id": "94",
@@ -2041,7 +2067,8 @@ Content-Type: application/json;charset=UTF-8
             "location": "Wichita",
             "language": "English",
             "workoutModality": "Bike",
-            "hardwareManufacturer": "Matrix"
+            "hardwareManufacturer": "Matrix",
+            "age": ["Kids"]
         },
         {
             "id": "116",
@@ -2074,7 +2101,8 @@ Content-Type: application/json;charset=UTF-8
             "programName": "Yoga",
             "location": "Wichita",
             "language": "English",
-            "workoutModality": ""
+            "workoutModality": "",
+            "age": ["Kids"]
         },
         {
             "id": "128",
@@ -2107,7 +2135,8 @@ Content-Type: application/json;charset=UTF-8
             "programName": "Yoga",
             "location": "Wichita",
             "language": "English",
-            "workoutModality": ""
+            "workoutModality": "",
+            "age": ["Kids"]
         }
     ],
     "summary": {
@@ -2145,7 +2174,35 @@ Content-Type: application/json;charset=UTF-8
             ],
             "instructor": [{ ... }],
             "equipment": [{ ... }],
-            "workoutModality": [{ ... }]
+            "workoutModality": [{ ... }],
+            "duration": [
+                {
+                    "id": "short",
+                    "count": 4
+                },
+                {
+                    "id": "15m",
+                    "count": 2
+                },
+                {
+                    "id": "30m",
+                    "count": 4
+                },
+                {
+                    "id": "45m",
+                    "count": 4
+                },
+                {
+                    "id": "1h",
+                    "count": 4
+                }
+            ],
+            "age": [
+                {
+                    "id": "Kids",
+                    "count": 4
+                }
+            ]
         }
     }
 }
@@ -2251,6 +2308,7 @@ Can be one of [`yes`, `no`].
 |items[].language |String |false |Video language.
 |items[].workoutModality |String |false |Workout modality.
 |items[].hardwareManufacturer |String |true |Hardware manufacturer.
+|items[].age |Array[String] |false |Target age groups of the video (names of "Age" terms).
 |summary |Object |false |Page summary.
 |summary.limit |Integer |false |Requested size of the page.
 |summary.page |Integer |false |Page number.
@@ -2540,6 +2598,7 @@ level.
 |items[].attachments[].url |string |false |URL of the attachment.
 |items[].workoutModality |String |false |Workout modality.
 |items[].hardwareManufacturer |String |true |Hardware manufacturer.
+|items[].age |Array[String] |false |Target age groups of the video (names of "Age" terms).
 |summary |Object |false |Page summary.
 |summary.limit |Integer |false |Requested size of the page.
 |summary.page |Integer |false |Page number.
@@ -2654,6 +2713,7 @@ This operation fetches recently added Videos. It returns only brief information 
 |items[].attachments[].url |string |false |URL of the attachment.
 |items[].workoutModality |String |false |Workout modality.
 |items[].hardwareManufacturer |String |true |Hardware manufacturer.
+|items[].age |Array[String] |false |Target age groups of the video (names of "Age" terms).
 |summary |Object |false |Page summary.
 |summary.limit |Integer |false |Requested size of the page.
 |summary.page |Integer |false |Page number.
@@ -2980,6 +3040,7 @@ therefore this way is deprecated in 2.0 and is removed in 3.0.
 |items[].attachments[].url |string |false |URL of the attachment.
 |items[].workoutModality |String |false |Workout modality.
 |items[].hardwareManufacturer |String |true |Hardware manufacturer.
+|items[].age |Array[String] |false |Target age groups of the video (names of "Age" terms).
 |summary |Object |false |Page summary.
 |summary.limit |Integer |false |Requested size of the page.
 |summary.page |Integer |false |Page number.
@@ -3173,6 +3234,7 @@ No request body.
 |videoBrief.customInfo |Map |false |Array of Key-Value to represent additional information of an entity. Partners could contain diverse information of same entities. This type designed to store that information.
 |videoBrief.workoutModality |String |false |Workout modality.
 |videoBrief.hardwareManufacturer |String |true |Hardware manufacturer.
+|videoBrief.age |Array[String] |false |Target age groups of the video (names of "Age" terms).
 |===
 
 [[_example_request_8]]
@@ -4861,6 +4923,7 @@ This endpoint lists available worlds
 |national[].videos.items[].releaseDate |Integer |false |Video release timestamp.
 |national[].videos.items[].workoutModality |String |false |Workout modality.
 |national[].videos.items[].hardwareManufacturer |String |true |Hardware manufacturer.
+|national[].videos.items[].age |Array[String] |false |Target age groups of the video (names of "Age" terms).
 |national[].videos.items[].language |String |false |Video language.
 |videos |Array[Object] |false |Localized video groups of the World. Same structure as for National videos. May be empty.
 |===
@@ -5366,6 +5429,7 @@ This operation returns Promo sections data (label, images and description).
 |learnMore[].video.releaseDate |Integer |false |Video release timestamp.
 |learnMore[].video.workoutModality |String |false |Workout modality.
 |learnMore[].video.hardwareManufacturer |String |true |Hardware manufacturer.
+|learnMore[].video.age |Array[String] |false |Target age groups of the video (names of "Age" terms).
 |learnMore[].video.language |String |false |Video language.
 |sections |Array[Object] |false |Array of promo sections(slides). May be empty.
 |sections[].imageTV |String |false |Image URL.
@@ -5561,6 +5625,7 @@ Can be one of [`yes`, `no`].
 |items[].attachments[].url |string |false |URL of the attachment.
 |items[].workoutModality |String |false |Workout modality.
 |items[].hardwareManufacturer |String |true |Hardware manufacturer.
+|items[].age |Array[String] |false |Target age groups of the video (names of "Age" terms).
 |items[].moderation_state |String |false |Confirms that the status of the received video is archived.
 |summary |Object |false |Page summary.
 |summary.limit |Integer |false |Requested size of the page.
@@ -5782,6 +5847,7 @@ No request body.
 |videoBrief.customInfo |Map |false |Array of Key-Value to represent additional information of an entity. Partners could contain diverse information of same entities. This type designed to store that information.
 |videoBrief.workoutModality |String |false |Workout modality.
 |videoBrief.hardwareManufacturer |String |true |Hardware manufacturer.
+|videoBrief.age |Array[String] |false |Target age groups of the video (names of "Age" terms).
 |videoBrief.moderation_state |String |false |Confirms that the status of the received video is archived.
 |===
 
