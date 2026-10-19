@@ -3686,6 +3686,7 @@ This operation returns all detailed information about a Live Stream.
 |liveStreamDetails.source[].type |String |false |Source type ('vimeo' or 'm3u8').
 |liveStreamDetails.source[].id |String |false |Source ID.
 |liveStreamDetails.source[].url |String |false |Source URL.
+|liveStreamDetails.chatEnabled |Boolean |false |Whether the chat is enabled for the Live Stream.
 |liveStreamBrief |Object |false |Brief details of the video.
 |liveStreamBrief.id |String |false |Unique ID of the Live Stream.
 |liveStreamBrief.name |String |false |Name of the Live Stream.
@@ -3761,6 +3762,7 @@ Content-Type: application/json;charset=UTF-8
     },
     "liveStreamDetails": {
         "status": "offline",
+        "chatEnabled": true,
         "description": "Let's move and stretch our bodies while we go on an imaginary adventure.",
         "equipment": "stationary bike",
         "source": [ {
