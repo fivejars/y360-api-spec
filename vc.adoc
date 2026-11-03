@@ -1697,6 +1697,7 @@ This operation returns brief information about Category Videos.
 |Path |Type |Optional |Description
 |items|Array[Object] |false |Array of highlighted videos data. May be empty.
 |items[].image |String |false |Highlighted video image URL.
+|items[].imageDuration |Integer |false |Screen time of the still image in seconds, from 3 to 10. Defaults to 8. Applies when the item has no video snippet.
 |items[].video |Object |false |Highlighted video object.
 |items[].video.name |String |false |Name of the Video (e.g. 'RPM #79 Express', 'BODYPUMP #100').
 |items[].video.id |String |false |Unique ID of the Video.
@@ -1767,6 +1768,7 @@ Content-Type: application/json;charset=UTF-8
   "items": [
     {
       "image": "https://localhost/sites/default/files/2021-03/y360_billboard001.jpg",
+      "imageDuration": 8,
       "video": {
         "id": "87",
         "name": "KIDS YOGA WITH CORRI",
