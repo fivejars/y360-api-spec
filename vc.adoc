@@ -1697,7 +1697,7 @@ This operation returns brief information about Category Videos.
 |Path |Type |Optional |Description
 |items|Array[Object] |false |Array of highlighted videos data. May be empty.
 |items[].image |String |false |Highlighted video image URL.
-|items[].video |Object |false |Highlighted video object.
+|items[].video |Object |false |Highlighted video object (deprecated, use `items[].destinationVideo`).
 |items[].video.name |String |false |Name of the Video (e.g. 'RPM #79 Express', 'BODYPUMP #100').
 |items[].video.id |String |false |Unique ID of the Video.
 |items[].video.duration |Integer |false |Video duration in seconds.
@@ -1725,6 +1725,13 @@ This operation returns brief information about Category Videos.
 |items[].video.hardwareManufacturer |String |true |Hardware manufacturer.
 |items[].video.age |Array[String] |false |Target age groups of the video (names of "Age" terms).
 |items[].video.language |String |false |Video language.
+|items[].destinationVideo |Object |false |Highlighted video object. Same fields as `items[].video`.
+|items[].videoSnippet |Object or empty Array |false |Short Wistia clip of the destination video, played on the Watch Now screen. Empty array if the video has no snippet. Has the same fields as `items[].destinationVideo` (they describe the destination video), except the fields below.
+|items[].videoSnippet.id |String |false |Snippet ID (deprecated). Fetching it with link:#resources-fetch-video-controller-i-t-should-fetch-video[Fetch Video] returns the clip. Kept for older app builds only: play the clip from `hashId` / `videoFiles` instead. Will become the destination video ID once no supported app build fetches it.
+|items[].videoSnippet.thumbnail |String |false |Thumbnail of the clip.
+|items[].videoSnippet.duration |Integer |false |Clip duration in seconds.
+|items[].videoSnippet.hashId |String |false |Wistia hash ID of the clip.
+|items[].videoSnippet.videoFiles |Array[Object] |false |Files of the clip. Same structure as `videoDetails.videoFiles` in link:#resources-fetch-video-controller-i-t-should-fetch-video[Fetch Video].
 |items[].topLevelCategory |Object |false |Top level category related to highlighted videos.
 |items[].topLevelCategory.name |String |false |Name of the Sub-category (e.g. 'Judo', 'Taekwondo').
 |items[].topLevelCategory.hidden |Boolean |false |Indicates whether the Category is hidden or not.
@@ -1801,6 +1808,35 @@ Content-Type: application/json;charset=UTF-8
         "workoutModality": "Bike",
         "hardwareManufacturer": "Matrix",
         "topLevelCategory": 219,
+      },
+      "destinationVideo": {
+        "id": "87",
+        "name": "KIDS YOGA WITH CORRI",
+        ... same fields as "video"
+      },
+      "videoSnippet": {
+        "id": "1000010962",
+        "name": "KIDS YOGA WITH CORRI",
+        "thumbnail": "http://embed.wistia.com/deliveries/bb7874759b790b90d80666975a45e23d74652766.bin",
+        "duration": 9,
+        ... other fields as in "destinationVideo"
+        "hashId": "6ngk332whj",
+        "videoFiles": [
+          {
+            "mimeType": "video/mp4",
+            "format": "mp4",
+            "quality": "origin",
+            "sizeInBytes": 16277033,
+            "sourceUrl": "http://embed.wistia.com/deliveries/0f29891648e606030e5a1311cea65f0e.bin"
+          },
+          {
+            "mimeType": "video/mp4",
+            "format": "mp4",
+            "quality": "360p",
+            "sizeInBytes": 541084,
+            "sourceUrl": "http://embed.wistia.com/deliveries/5a768fc09b543b272c0c78d85788d41e5a333f33.bin"
+          }
+        ]
       },
       "topLevelCategory": {
           "id": "219",
@@ -3153,6 +3189,8 @@ Content-Type: application/json;charset=UTF-8
 
 This operation returns all detailed information about Video.
 
+Deprecated: `videoId` also accepts a Watch Now snippet ID (`items[].videoSnippet.id` from link:#resources-fetch-highlighted-videos-controller-i-t-should-fetch-highlighted-videos[Fetch Highlighted Videos]). The response then describes the snippet clip: `videoBrief` is the snippet object, `videoDetails.hashId` and `videoDetails.videoFiles` are the clip's, and `videoDetails.subtitles` is empty. This is kept for older app builds only and will be removed; play snippets from `videoSnippet.hashId` / `videoSnippet.videoFiles` instead.
+
 [[_request_headers_8]]
 ==== link:#_request_headers_8[Request headers]
 
@@ -3170,7 +3208,7 @@ This operation returns all detailed information about Video.
 |===
 |Parameter |Type |Optional |Description
 |provider |String |false |Unique ID of the Content Provider.
-|videoId |String |false |Unique ID of the Video.
+|videoId |String |false |Unique ID of the Video, or a Watch Now snippet ID (deprecated, see above).
 |===
 
 [[_query_parameters_8]]
